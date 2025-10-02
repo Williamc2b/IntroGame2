@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     public Vector2 moveValue;
     public float speed;
     private int count;
-
+    private int numPickups = 4;
+    public TextMeshProUGUI ScoreText;
+    public TextMeshProUGUI WinText;
     void Start()
     {
         count = 0;
+        WinText.text = "";
+        SetCountText();
     }
     void OnMove(InputValue value)
     {
@@ -25,10 +30,20 @@ public class PlayerController : MonoBehaviour
 
     void OggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "PickUp")
+        if (other.gameObject.tag == "PickUp")
         {
-            count = count + 1;
             other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+        }
+    }
+
+    private void SetCountText()
+    {
+        ScoreText.text = "Score: " + count.ToString();
+        if (count >= numPickups)
+        {
+            WinText.text = "You Win!";
         }
     }
 }
